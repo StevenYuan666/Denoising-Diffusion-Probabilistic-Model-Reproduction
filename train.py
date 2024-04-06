@@ -30,7 +30,7 @@ beta_minmax = [1e-4, 2e-2]
 train_batch_size = 128
 inference_batch_size = 64
 lr = 5e-5
-epochs = 100
+epochs = 500
 
 seed = 1234
 

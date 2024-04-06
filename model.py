@@ -9,16 +9,16 @@ class PositionalEncoding(nn.Module):
     def __init__(self, num_hiddens, max_step=1000):
         super().__init__()
         # Create a long enough Positional embedding matrix
-        self.positional_encoding = torch.zeros((1, max_step, num_hiddens))  # (1, max_step, num_hiddens)
+        self.positional_encoding = torch.zeros((max_step, num_hiddens))  # (max_step, num_hiddens)
         x = torch.arange(max_step, dtype=torch.float32).reshape(-1, 1)  # (max_step, 1)
         x = x / torch.pow(10000, torch.arange(0, num_hiddens, 2,
                                               dtype=torch.float32) / num_hiddens)  # (max_step, num_hiddens/2)
-        self.positional_encoding[:, :, 0::2] = torch.sin(x)
-        self.positional_encoding[:, :, 1::2] = torch.cos(x)
+        self.positional_encoding[:, 0::2] = torch.sin(x)
+        self.positional_encoding[:, 1::2] = torch.cos(x)
 
     def forward(self, t):
         self.positional_encoding = self.positional_encoding.to(t.device)
-        return self.positional_encoding[:, t, :].to(t.device).squeeze()
+        return self.positional_encoding[t, :].to(t.device)
 
 
 class ConvBlock(nn.Conv2d):
